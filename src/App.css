@@ -1,0 +1,11 @@
+.flex-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.App {
+  height: 100vh;
+  margin: -8px;
+  width: 100vw;
+  background-color: #263238;
+}
