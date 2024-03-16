@@ -3,7 +3,23 @@ import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
-export default function Todo() {
+// context
+import { useContext } from "react";
+import TodosContext from "../../context/TodosContext";
+
+export default function Todo({ todo }) {
+  const { todos, setTodos } = useContext(TodosContext);
+
+  // pass through the todo id for parent component
+  function handleCheckClick() {
+    const newUpdateTodos = todos.map((t) => {
+      if (t.id === todo.id) {
+        return { ...t, isCompleted: !t.isCompleted };
+      }
+      return t;
+    });
+    setTodos(newUpdateTodos);
+  }
   const iconStyles = {
     color: "#FFC107",
     background: "#fff",
@@ -18,22 +34,34 @@ export default function Todo() {
         backgroundColor: "#304ffe",
         color: "#eee",
         minWidth: 275,
-        marginTop: 5,
+        marginTop: 2,
       }}
     >
       <CardContent>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item xs={8}>
-            <Typography variant="h5">First task</Typography>
-            <Typography variant="caption">
-              amen and aatef and ayman and ayman eltany and abo akkar
-            </Typography>
+            <Typography variant="h5">{todo.title}</Typography>
+            <Typography variant="caption">{todo.details}</Typography>
           </Grid>
           <Grid item xs={4} textAlign="right">
-            <IconButton color="primary" aria-label="mark as done">
-              <DoneIcon sx={iconStyles} />
+            {/* CHECK ICON BUTTON */}
+            <IconButton
+              color="primary"
+              aria-label="mark as done"
+              onClick={handleCheckClick}
+            >
+              <DoneIcon
+                sx={{
+                  ...iconStyles,
+                  background: todo.isCompleted ? "#FFC107" : "white",
+                  color: todo.isCompleted ? "white" : "#FFC107",
+                  borderColor: todo.isCompleted ? "white" : "#FFC107",
+                }}
+              />
             </IconButton>
-            <IconButton color="secondary" aria-label="delete task">
+            {/*=== CHECK ICON BUTTON ===*/}
+
+            <IconButton color="secondary" aria-label="edit task">
               <EditOutlinedIcon
                 sx={{
                   ...iconStyles,
