@@ -21,7 +21,10 @@ import TodosContext from "../../context/TodosContext";
 /////////////////////
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
-  const [titleInputAndDetails, setTitleAndDetailsInput] = useState({});
+  const [titleInputAndDetails, setTitleAndDetailsInput] = useState({
+    title: "",
+    details: "",
+  });
 
   const todosJsx = todos.map((todo) => {
     return <Todo key={todo.id} todo={todo} />;
@@ -37,6 +40,7 @@ export default function TodoList() {
     setTodos([...todos, newTodo]);
 
     // reset the state of the inputs
+    // when you add a new itemTodo
     setTitleAndDetailsInput({
       title: "",
       details: "",

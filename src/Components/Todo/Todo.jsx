@@ -5,6 +5,7 @@ import {
   IconButton,
   Typography,
   Button,
+  TextField,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -27,6 +28,11 @@ export default function Todo({ todo }) {
 
   // state for dialog state change
   const [openDialog, setOpenDialog] = useState(false);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [updateTodo, setUpdateTodo] = useState({
+    title: todo.title,
+    details: todo.details,
+  });
 
   // event handlers 💀💀💀💀
 
@@ -46,14 +52,32 @@ export default function Todo({ todo }) {
     setOpenDialog(true);
   }
 
-  function handleClose() {
+  function handleDeleteDialogClose() {
     setOpenDialog(false);
   }
 
   function handleDeleteConfirm() {
     const newUpdateTodos = todos.filter((t) => t.id !== todo.id);
     setTodos(newUpdateTodos);
-    handleClose(false);
+    // handleClose(false);
+  }
+
+  function handleUpdateClick() {
+    setShowUpdateDialog(true);
+  }
+
+  function handleUpdateClose() {
+    setShowUpdateDialog(false);
+  }
+
+  function handleUpdateConfirm() {
+    const newUpdateTodos = todos.map((t) => {
+      return todo.id === t.id
+        ? { ...t, title: updateTodo.title, details: updateTodo.details }
+        : t;
+    });
+    setTodos(newUpdateTodos);
+    setShowUpdateDialog(false);
   }
   // ==== event handlers ==== 💀💀💀💀
 
@@ -70,7 +94,7 @@ export default function Todo({ todo }) {
       {/* DELETE DIALOG */}
       <Dialog
         open={openDialog}
-        onClose={handleClose}
+        onClose={handleDeleteDialogClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -83,13 +107,61 @@ export default function Todo({ todo }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleDeleteDialogClose}>Disagree</Button>
           <Button onClick={handleDeleteConfirm} autoFocus>
-            Agree
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
       {/*=== DELETE DIALOG ===*/}
+      {/* UPDATE DIALOG */}
+      <Dialog
+        open={showUpdateDialog}
+        onClose={handleUpdateClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Edit the assignment "}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="email"
+            label="title task name"
+            fullWidth
+            variant="standard"
+            value={updateTodo.title}
+            onChange={(e) => {
+              setUpdateTodo({ ...updateTodo, title: e.target.value });
+            }}
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="email"
+            label="details"
+            fullWidth
+            variant="standard"
+            value={updateTodo.details}
+            onChange={(e) => {
+              setUpdateTodo({ ...updateTodo, details: e.target.value });
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleUpdateClose}>Disagree</Button>
+          <Button onClick={handleUpdateConfirm} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/*=== UPDATE DIALOG ===*/}
       <Card
         sx={{
           backgroundColor: "#304ffe",
@@ -122,7 +194,12 @@ export default function Todo({ todo }) {
               </IconButton>
               {/*=== CHECK ICON BUTTON ===*/}
 
-              <IconButton color="secondary" aria-label="edit task">
+              {/* UPDATE BUTTON */}
+              <IconButton
+                onClick={handleUpdateClick}
+                color="secondary"
+                aria-label="edit task"
+              >
                 <EditOutlinedIcon
                   sx={{
                     ...iconStyles,
@@ -131,6 +208,7 @@ export default function Todo({ todo }) {
                   }}
                 />
               </IconButton>
+              {/*=== UPDATE BUTTON ===*/}
 
               {/* DELETE BUTTON */}
               <IconButton
