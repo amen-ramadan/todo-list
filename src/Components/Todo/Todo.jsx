@@ -45,6 +45,7 @@ export default function Todo({ todo }) {
       return t;
     });
     setTodos(newUpdateTodos);
+    localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
   }
 
   // delete function and close the dialog
@@ -60,6 +61,7 @@ export default function Todo({ todo }) {
     const newUpdateTodos = todos.filter((t) => t.id !== todo.id);
     setTodos(newUpdateTodos);
     // handleClose(false);
+    localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
   }
 
   function handleUpdateClick() {
@@ -78,6 +80,7 @@ export default function Todo({ todo }) {
     });
     setTodos(newUpdateTodos);
     setShowUpdateDialog(false);
+    localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
   }
   // ==== event handlers ==== 💀💀💀💀
 
@@ -162,6 +165,7 @@ export default function Todo({ todo }) {
         </DialogActions>
       </Dialog>
       {/*=== UPDATE DIALOG ===*/}
+
       <Card
         sx={{
           backgroundColor: "#304ffe",

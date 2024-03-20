@@ -21,18 +21,38 @@ import TodosContext from "../../context/TodosContext";
 /////////////////////
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
+  const [displayTodosType, setDisplayTodosType] = useState("all");
   const [titleInputAndDetails, setTitleAndDetailsInput] = useState({
     title: "",
     details: "",
   });
 
-  const todosJsx = todos.map((todo) => {
+  // filtration arrays
+  const completedTodos = todos.filter((todo) => {
+    return todo.isCompleted;
+  });
+  // filtration arrays
+  const notCompletedTodos = todos.filter((todo) => {
+    return !todo.isCompleted;
+  });
+
+  // handle the nav links if has a completed or not completed or all
+  let todosToBeRendered = todos;
+  if (displayTodosType == "completed") {
+    todosToBeRendered = completedTodos;
+  } else if (displayTodosType == "non-completed") {
+    todosToBeRendered = notCompletedTodos;
+  }
+
+  // the Todos viewer
+  const todosJsx = todosToBeRendered.map((todo) => {
     return <Todo key={todo.id} todo={todo} />;
   });
 
   // call useEffect
   useEffect(() => {
-    console.log("useEffect called");
+    const storageTodos = JSON.parse(localStorage.getItem("todos"));
+    setTodos(storageTodos);
   }, []);
 
   function handelAddClick() {
@@ -55,13 +75,17 @@ export default function TodoList() {
     });
 
     // قمنا بتحديث ال state بهذه الطريقة حتى نتفادى مشكلة التحديث المتكرر لل state
-    const updateTodos = [...todos, newTodo];
-    setTodos(updateTodos);
+    const newUpdateTodos = [...todos, newTodo];
+    setTodos(newUpdateTodos);
 
     // add item to the local storage
-    localStorage.setItem("todos", JSON.stringify(updateTodos));
+    localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
   }
 
+  function changeDisplayType(e) {
+    console.log(e.target.value);
+    setDisplayTodosType(e.target.value);
+  }
   // component todo
   return (
     <Container maxWidth="sm">
@@ -69,10 +93,14 @@ export default function TodoList() {
         <CardContent>
           <Typography variant="h5">My Tasks</Typography>
           <Divider sx={{ marginBottom: "7px" }} />
-          <ToggleButtonGroup value="left" exclusive>
-            <ToggleButton value="left">All</ToggleButton>
-            <ToggleButton value="center">Success</ToggleButton>
-            <ToggleButton value="right">Unfinished</ToggleButton>
+          <ToggleButtonGroup
+            value={displayTodosType}
+            exclusive
+            onChange={changeDisplayType}
+          >
+            <ToggleButton value="all">All</ToggleButton>
+            <ToggleButton value="completed">Success</ToggleButton>
+            <ToggleButton value="non-completed">Not Completed</ToggleButton>
           </ToggleButtonGroup>
           {/* components todo */}
           {todosJsx}
