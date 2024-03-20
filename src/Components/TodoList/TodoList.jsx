@@ -89,7 +89,7 @@ export default function TodoList() {
   // component todo
   return (
     <Container maxWidth="sm">
-      <Card>
+      <Card style={{ maxHeight: "80vh", overflow: "scroll" }}>
         <CardContent>
           <Typography variant="h5">My Tasks</Typography>
           <Divider sx={{ marginBottom: "7px" }} />
@@ -97,6 +97,7 @@ export default function TodoList() {
             value={displayTodosType}
             exclusive
             onChange={changeDisplayType}
+            color="primary"
           >
             <ToggleButton value="all">All</ToggleButton>
             <ToggleButton value="completed">Success</ToggleButton>
@@ -148,8 +149,9 @@ export default function TodoList() {
             <Grid item xs={3}>
               <Button
                 variant="contained"
-                sx={{ background: "#FFC107" }}
+                sx={{ background: "primary" }}
                 onClick={handelAddClick}
+                disabled={titleInputAndDetails.title.length == 0}
               >
                 Add a task
               </Button>

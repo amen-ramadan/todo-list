@@ -168,7 +168,7 @@ export default function Todo({ todo }) {
 
       <Card
         sx={{
-          backgroundColor: "#304ffe",
+          backgroundColor: "#0097a7",
           color: "#eee",
           minWidth: 275,
           marginTop: 2,
@@ -177,7 +177,14 @@ export default function Todo({ todo }) {
         <CardContent>
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item xs={8}>
-              <Typography variant="h5">{todo.title}</Typography>
+              <Typography
+                variant="h5"
+                sx={{
+                  textDecoration: todo.isCompleted ? "line-through" : "none",
+                }}
+              >
+                {todo.title}
+              </Typography>
               <Typography variant="caption">{todo.details}</Typography>
             </Grid>
             <Grid item xs={4} textAlign="right">
