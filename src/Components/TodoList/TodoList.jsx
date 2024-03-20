@@ -14,7 +14,7 @@ import {
 //component
 import Todo from "../Todo/Todo";
 // others
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodosContext from "../../context/TodosContext";
 
@@ -30,6 +30,11 @@ export default function TodoList() {
     return <Todo key={todo.id} todo={todo} />;
   });
 
+  // call useEffect
+  useEffect(() => {
+    console.log("useEffect called");
+  }, []);
+
   function handelAddClick() {
     const newTodo = {
       id: uuidv4(),
@@ -37,10 +42,8 @@ export default function TodoList() {
       details: titleInputAndDetails.details,
       isCompleted: false,
     };
-    setTodos([...todos, newTodo]);
 
-    // reset the state of the inputs
-    // when you add a new itemTodo
+    // reset the state of the inputs, when you add a new itemTodo
     setTitleAndDetailsInput({
       title: "",
       details: "",
@@ -50,6 +53,13 @@ export default function TodoList() {
       title: "",
       details: "",
     });
+
+    // قمنا بتحديث ال state بهذه الطريقة حتى نتفادى مشكلة التحديث المتكرر لل state
+    const updateTodos = [...todos, newTodo];
+    setTodos(updateTodos);
+
+    // add item to the local storage
+    localStorage.setItem("todos", JSON.stringify(updateTodos));
   }
 
   // component todo
