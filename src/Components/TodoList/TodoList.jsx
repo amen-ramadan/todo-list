@@ -14,7 +14,7 @@ import {
 //component
 import Todo from "../Todo/Todo";
 // others
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodosContext from "../../context/TodosContext";
 
@@ -28,13 +28,21 @@ export default function TodoList() {
   });
 
   // filtration arrays
-  const completedTodos = todos.filter((todo) => {
-    return todo.isCompleted;
-  });
+  // and using useMemo from performance
+  const completedTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      console.log("calling complete");
+      return todo.isCompleted;
+    });
+  }, [todos]);
   // filtration arrays
-  const notCompletedTodos = todos.filter((todo) => {
-    return !todo.isCompleted;
-  });
+  // and using useMemo from performance
+  const notCompletedTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      console.log("nooooo");
+      return !todo.isCompleted;
+    });
+  }, [todos]);
 
   // handle the nav links if has a completed or not completed or all
   let todosToBeRendered = todos;
@@ -49,7 +57,7 @@ export default function TodoList() {
     return <Todo key={todo.id} todo={todo} />;
   });
 
-  // call useEffect
+  // call useEffect in order to git data from local storage
   useEffect(() => {
     const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
     setTodos(storageTodos);
@@ -83,7 +91,6 @@ export default function TodoList() {
   }
 
   function changeDisplayType(e) {
-    console.log(e.target.value);
     setDisplayTodosType(e.target.value);
   }
   // component todo
