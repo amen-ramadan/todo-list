@@ -33,18 +33,9 @@ export default function TodoList() {
     title: "",
     details: "",
   });
-
-  // state for todo coming from child component in order to using id to update and delete
-  const [dialogTodo, setDialogTodo] = useState(null);
-
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
-  // state for dialog state change
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
-  const [updateTodo, setUpdateTodo] = useState({
-    title: dialogTodo ? dialogTodo.title : "",
-    details: dialogTodo ? dialogTodo.details : "",
-  });
+  const [dialogTodo, setDialogTodo] = useState("");
 
   // filtration arrays
   // and using useMemo from performance
@@ -110,12 +101,12 @@ export default function TodoList() {
 
   // delete function and close the dialog
   function handleDeleteClick(todo) {
-    setOpenDeleteDialog(true);
+    setShowDeleteDialog(true);
     setDialogTodo(todo);
   }
 
   function handleDeleteDialogClose() {
-    setOpenDeleteDialog(false);
+    setShowDeleteDialog(false);
   }
 
   function handleDeleteConfirm() {
@@ -125,10 +116,10 @@ export default function TodoList() {
     handleDeleteDialogClose(false);
   }
 
-  // update function and close the dialog
-  function handleUpdateClick(todo) {
-    setShowUpdateDialog(true);
+  // functions in order to updating Todos
+  function openUpdateDialog(todo) {
     setDialogTodo(todo);
+    setShowUpdateDialog(true);
   }
 
   function handleUpdateClose() {
@@ -138,7 +129,7 @@ export default function TodoList() {
   function handleUpdateConfirm() {
     const newUpdateTodos = todos.map((t) => {
       return dialogTodo.id === t.id
-        ? { ...t, title: updateTodo.title, details: updateTodo.details }
+        ? { ...t, title: dialogTodo.title, details: dialogTodo.details }
         : t;
     });
     setTodos(newUpdateTodos);
@@ -153,7 +144,7 @@ export default function TodoList() {
         key={todo.id}
         todo={todo}
         showDelete={handleDeleteClick}
-        showUpdate={handleUpdateClick}
+        showUpdate={openUpdateDialog}
       />
     );
   });
@@ -162,7 +153,7 @@ export default function TodoList() {
     <>
       {/* DELETE DIALOG */}
       <Dialog
-        open={openDeleteDialog}
+        open={showDeleteDialog}
         onClose={handleDeleteDialogClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -183,7 +174,6 @@ export default function TodoList() {
         </DialogActions>
       </Dialog>
       {/*=== DELETE DIALOG ===*/}
-
       {/* UPDATE DIALOG */}
       <Dialog
         open={showUpdateDialog}
@@ -204,9 +194,9 @@ export default function TodoList() {
             label="title task name"
             fullWidth
             variant="standard"
-            value={updateTodo.title}
+            value={dialogTodo.title}
             onChange={(e) => {
-              setUpdateTodo({ ...updateTodo, title: e.target.value });
+              setDialogTodo({ ...dialogTodo, title: e.target.value });
             }}
           />
           <TextField
@@ -218,9 +208,9 @@ export default function TodoList() {
             label="details"
             fullWidth
             variant="standard"
-            value={updateTodo.details}
+            value={dialogTodo.details}
             onChange={(e) => {
-              setUpdateTodo({ ...updateTodo, details: e.target.value });
+              setDialogTodo({ ...dialogTodo, details: e.target.value });
             }}
           />
         </DialogContent>
@@ -232,7 +222,6 @@ export default function TodoList() {
         </DialogActions>
       </Dialog>
       {/*=== UPDATE DIALOG ===*/}
-
       <Container maxWidth="sm">
         <Card style={{ maxHeight: "80vh", overflow: "scroll" }}>
           <CardContent>

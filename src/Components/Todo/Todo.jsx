@@ -1,10 +1,25 @@
-import { Card, CardContent, Grid, IconButton, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  Typography,
+  Button,
+  TextField,
+} from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
+// import dialogs
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 // context
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import TodosContext from "../../context/TodosContext";
 
 export default function Todo({ todo, showDelete, showUpdate }) {
@@ -12,6 +27,8 @@ export default function Todo({ todo, showDelete, showUpdate }) {
   const { todos, setTodos } = useContext(TodosContext);
 
   // event handlers 💀💀💀💀
+
+  // pass through the todo id for parent component
   function handleCheckClick() {
     const newUpdateTodos = todos.map((t) => {
       if (t.id === todo.id) {
@@ -21,6 +38,11 @@ export default function Todo({ todo, showDelete, showUpdate }) {
     });
     setTodos(newUpdateTodos);
     localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
+  }
+
+  // update function and close the dialog
+  function handleUpdateClick() {
+    showUpdate(todo);
   }
 
   // ==== event handlers ==== 💀💀💀💀
@@ -76,9 +98,7 @@ export default function Todo({ todo, showDelete, showUpdate }) {
 
               {/* UPDATE BUTTON */}
               <IconButton
-                onClick={() => {
-                  showUpdate(todo);
-                }}
+                onClick={handleUpdateClick}
                 color="secondary"
                 aria-label="edit task"
               >
