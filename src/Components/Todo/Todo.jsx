@@ -1,30 +1,17 @@
-import {
-  Card,
-  CardContent,
-  Grid,
-  IconButton,
-  Typography,
-  Button,
-  TextField,
-} from "@mui/material";
+import { Card, CardContent, Grid, IconButton, Typography } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
-// import dialogs
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-
 // context
 import { useContext, useState } from "react";
 import TodosContext from "../../context/TodosContext";
+import { ToastContext } from "../../context/ToastContext";
 
 export default function Todo({ todo, showDelete, showUpdate }) {
   // import context
   const { todos, setTodos } = useContext(TodosContext);
+  const { showHideToast } = useContext(ToastContext);
 
   // event handlers 💀💀💀💀
 
@@ -38,6 +25,8 @@ export default function Todo({ todo, showDelete, showUpdate }) {
     });
     setTodos(newUpdateTodos);
     localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
+    // show toast
+    showHideToast("Modified successfully");
   }
 
   // update function and close the dialog

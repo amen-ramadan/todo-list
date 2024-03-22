@@ -24,10 +24,20 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { ToastContext } from "../../context/ToastContext";
 
 /////////////////////
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
+  // فينا نستخدم اما هي الطريقة  او هي الطريقة عادي
+  // const {showHideContext} = useContext(ToastContext);
+  // const toast = useContext(ToastContext);
+  // طريقة استخدامها
+  // toast.showHideContext
+  // انا حاليا رح استخدم هي لاطريقة لانو اسهل للحالة يلي انا فيها
+  const { showHideToast } = useContext(ToastContext);
+
+  ///////////
   const [displayTodosType, setDisplayTodosType] = useState("all");
   const [titleInputAndDetails, setTitleAndDetailsInput] = useState({
     title: "",
@@ -91,6 +101,7 @@ export default function TodoList() {
 
     // add item to the local storage
     localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
+    showHideToast("Added successfully");
   }
 
   function changeDisplayType(e) {
@@ -114,6 +125,7 @@ export default function TodoList() {
     setTodos(newUpdateTodos);
     localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
     handleDeleteDialogClose(false);
+    showHideToast("Delete successfully");
   }
 
   // functions in order to updating Todos
@@ -135,6 +147,7 @@ export default function TodoList() {
     setTodos(newUpdateTodos);
     setShowUpdateDialog(false);
     localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
+    showHideToast("update successfully");
   }
 
   // the Todos jsx viewer
