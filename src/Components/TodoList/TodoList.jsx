@@ -24,7 +24,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ToastContext } from "../../context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 
 /////////////////////
 export default function TodoList() {
@@ -35,7 +35,7 @@ export default function TodoList() {
   // طريقة استخدامها
   // toast.showHideContext
   // انا حاليا رح استخدم هي لاطريقة لانو اسهل للحالة يلي انا فيها
-  const { showHideToast } = useContext(ToastContext);
+  const { showHideToast } = useToast();
 
   ///////////
   const [displayTodosType, setDisplayTodosType] = useState("all");

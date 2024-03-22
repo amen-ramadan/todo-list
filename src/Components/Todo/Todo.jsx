@@ -6,12 +6,12 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 // context
 import { useContext, useState } from "react";
 import TodosContext from "../../context/TodosContext";
-import { ToastContext } from "../../context/ToastContext";
+import { useToast } from "../../context/ToastContext";
 
 export default function Todo({ todo, showDelete, showUpdate }) {
   // import context
   const { todos, setTodos } = useContext(TodosContext);
-  const { showHideToast } = useContext(ToastContext);
+  const { showHideToast } = useToast();
 
   // event handlers 💀💀💀💀
 

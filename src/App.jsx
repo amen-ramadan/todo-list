@@ -5,8 +5,7 @@ import { useState } from "react";
 import TodosContext from "./context/TodosContext";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
-import MySnackBar from "./Components/MySnackBar/MySnackBar";
-import { ToastContext } from "./context/ToastContext";
+import { ToastProvider } from "./context/ToastContext";
 
 const initialTodos = [
   {
@@ -38,27 +37,16 @@ const theme = createTheme({
 
 function App() {
   const [todos, setTodos] = useState(initialTodos);
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
-
-  function showHideToast(message) {
-    setOpen(true);
-    setMessage(message);
-    setTimeout(() => {
-      setOpen(false);
-    }, 2000);
-  }
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContext.Provider value={{ showHideToast }}>
+      <ToastProvider>
         <div className="App flex-box">
-          <MySnackBar open={open} message={message} />
           <TodosContext.Provider value={{ todos, setTodos }}>
             <TodoList />
           </TodosContext.Provider>
         </div>
-      </ToastContext.Provider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }
