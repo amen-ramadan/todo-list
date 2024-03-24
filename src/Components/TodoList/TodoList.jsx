@@ -14,9 +14,10 @@ import {
 //component
 import Todo from "../Todo/Todo";
 // others
-import { useState, useContext, useEffect, useMemo } from "react";
+import { useState, useContext, useEffect, useMemo, useReducer } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodosContext from "../../context/TodosContext";
+import reducer from "../../reducers/todoReducer";
 
 // import dialogs
 import Dialog from "@mui/material/Dialog";
@@ -28,7 +29,8 @@ import { useToast } from "../../context/ToastContext";
 
 /////////////////////
 export default function TodoList() {
-  const { todos, setTodos } = useContext(TodosContext);
+  const [todos, dispatch] = useReducer(reducer, []);
+  const { todos2, setTodos } = useContext(TodosContext);
   // فينا نستخدم اما هي الطريقة  او هي الطريقة عادي
   // const {showHideContext} = useContext(ToastContext);
   // const toast = useContext(ToastContext);
@@ -77,32 +79,22 @@ export default function TodoList() {
   }, []);
 
   function handelAddClick() {
-    const newTodo = {
-      id: uuidv4(),
-      title: titleInputAndDetails.title,
-      details: titleInputAndDetails.details,
-      isCompleted: false,
-    };
+    dispatch({
+      type: "added",
+      payload: {
+        title: titleInputAndDetails.title,
+        details: titleInputAndDetails.details,
+      },
+    });
 
     // reset the state of the inputs, when you add a new itemTodo
     setTitleAndDetailsInput({
       title: "",
       details: "",
     });
-    setTodos([...todos, newTodo]);
-    setTitleAndDetailsInput({
-      title: "",
-      details: "",
-    });
-
-    // قمنا بتحديث ال state بهذه الطريقة حتى نتفادى مشكلة التحديث المتكرر لل state
-    const newUpdateTodos = [...todos, newTodo];
-    setTodos(newUpdateTodos);
-
-    // add item to the local storage
-    localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
     showHideToast("Added successfully");
-  }
+
+    }
 
   function changeDisplayType(e) {
     setDisplayTodosType(e.target.value);
