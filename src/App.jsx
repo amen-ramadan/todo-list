@@ -6,6 +6,7 @@ import TodosContext from "./context/TodosContext";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { ToastProvider } from "./context/ToastContext";
+import TodosProvider from "./context/TodosContext";
 
 const initialTodos = [
   {
@@ -40,13 +41,13 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastProvider>
-        <div className="App flex-box">
-          <TodosContext.Provider value={{ todos, setTodos }}>
-            <TodoList />
-          </TodosContext.Provider>
-        </div>
-      </ToastProvider>
+      <TodosProvider>
+        <ToastProvider>
+          <div className="App flex-box">
+              <TodoList />     
+          </div>
+        </ToastProvider>
+      </TodosProvider>
     </ThemeProvider>
   );
 }

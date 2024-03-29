@@ -4,27 +4,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 // context
-import { useContext, useState } from "react";
-import TodosContext from "../../context/TodosContext";
+import{ useTodos } from "../../context/TodosContext";
 import { useToast } from "../../context/ToastContext";
 
 export default function Todo({ todo, showDelete, showUpdate }) {
-  // import context
-  const { todos, setTodos } = useContext(TodosContext);
+
+  const { todos, dispatch } = useTodos()
   const { showHideToast } = useToast();
 
   // event handlers 💀💀💀💀
 
   // pass through the todo id for parent component
   function handleCheckClick() {
-    const newUpdateTodos = todos.map((t) => {
-      if (t.id === todo.id) {
-        return { ...t, isCompleted: !t.isCompleted };
-      }
-      return t;
-    });
-    setTodos(newUpdateTodos);
-    localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
+    dispatch({type: 'toggleCompleted', payload: todo})
     // show toast
     showHideToast("Modified successfully");
   }

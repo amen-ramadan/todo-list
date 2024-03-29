@@ -14,10 +14,9 @@ import {
 //component
 import Todo from "../Todo/Todo";
 // others
-import { useState, useContext, useEffect, useMemo, useReducer } from "react";
-import { v4 as uuidv4 } from "uuid";
-import TodosContext from "../../context/TodosContext";
-import reducer from "../../reducers/todoReducer";
+import { useState, useEffect, useMemo } from "react";
+import { useToast } from "../../context/ToastContext";
+import { useTodos } from "../../context/TodosContext";
 
 // import dialogs
 import Dialog from "@mui/material/Dialog";
@@ -25,12 +24,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useToast } from "../../context/ToastContext";
 
 /////////////////////
+
+
 export default function TodoList() {
-  const [todos, dispatch] = useReducer(reducer, []);
-  const { todos2, setTodos } = useContext(TodosContext);
+
+  const {todos, dispatch} = useTodos()
   // فينا نستخدم اما هي الطريقة  او هي الطريقة عادي
   // const {showHideContext} = useContext(ToastContext);
   // const toast = useContext(ToastContext);
@@ -74,8 +74,7 @@ export default function TodoList() {
 
   // call useEffect in order to git data from local storage
   useEffect(() => {
-    const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
-    setTodos(storageTodos);
+    dispatch({ type: "get" });
   }, []);
 
   function handelAddClick() {
@@ -113,9 +112,7 @@ export default function TodoList() {
   }
 
   function handleDeleteConfirm() {
-    const newUpdateTodos = todos.filter((t) => t.id !== dialogTodo.id);
-    setTodos(newUpdateTodos);
-    localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
+    dispatch({ type: 'deleted', payload:  dialogTodo });
     handleDeleteDialogClose(false);
     showHideToast("Delete successfully");
   }
@@ -131,14 +128,8 @@ export default function TodoList() {
   }
 
   function handleUpdateConfirm() {
-    const newUpdateTodos = todos.map((t) => {
-      return dialogTodo.id === t.id
-        ? { ...t, title: dialogTodo.title, details: dialogTodo.details }
-        : t;
-    });
-    setTodos(newUpdateTodos);
+    dispatch({ type: "updated", payload: dialogTodo });
     setShowUpdateDialog(false);
-    localStorage.setItem("todos", JSON.stringify(newUpdateTodos));
     showHideToast("update successfully");
   }
 
