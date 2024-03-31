@@ -51,7 +51,7 @@ export default function reducer(currentTodos, action) {
             }
         case 'get':
             {
-                const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
+                const storageTodos = JSON.parse(localStorage.getItem("todos"))?? [];
                 return storageTodos;
             }
         default:

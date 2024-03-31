@@ -4,12 +4,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 // context
-import{ useTodos } from "../../context/TodosContext";
+import{ useDispatchTodos } from "../../context/TodosContext";
 import { useToast } from "../../context/ToastContext";
 
 export default function Todo({ todo, showDelete, showUpdate }) {
 
-  const { todos, dispatch } = useTodos()
+  const dispatch  = useDispatchTodos()
   const { showHideToast } = useToast();
 
   // event handlers 💀💀💀💀

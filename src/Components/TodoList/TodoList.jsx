@@ -16,7 +16,7 @@ import Todo from "../Todo/Todo";
 // others
 import { useState, useEffect, useMemo } from "react";
 import { useToast } from "../../context/ToastContext";
-import { useTodos } from "../../context/TodosContext";
+import { useDispatchTodos, useTodos } from "../../context/TodosContext";
 
 // import dialogs
 import Dialog from "@mui/material/Dialog";
@@ -30,7 +30,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 export default function TodoList() {
 
-  const {todos, dispatch} = useTodos()
+  const todos = useTodos();
+  const dispatch = useDispatchTodos();
+
+
   // فينا نستخدم اما هي الطريقة  او هي الطريقة عادي
   // const {showHideContext} = useContext(ToastContext);
   // const toast = useContext(ToastContext);

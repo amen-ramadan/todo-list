@@ -1,33 +1,10 @@
 import "./App.css";
 import TodoList from "./Components/TodoList/TodoList";
-import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
-import TodosContext from "./context/TodosContext";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { ToastProvider } from "./context/ToastContext";
 import TodosProvider from "./context/TodosContext";
 
-const initialTodos = [
-  {
-    id: uuidv4(),
-    title: "read a book",
-    details: "book a7san mn book wa7ed",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "read a book2",
-    details: "book a7san mn book wa7ed",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "read a book3",
-    details: "book a7san mn book wa7ed",
-    isCompleted: false,
-  },
-];
 const theme = createTheme({
   palette: {
     primary: {
@@ -37,7 +14,6 @@ const theme = createTheme({
 });
 
 function App() {
-  const [todos, setTodos] = useState(initialTodos);
 
   return (
     <ThemeProvider theme={theme}>
